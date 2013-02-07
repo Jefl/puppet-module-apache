@@ -6,7 +6,7 @@ class apache::ssl {
       exec { 'enable-ssl':
         command => '/usr/sbin/a2enmod ssl',
         creates => '/etc/apache2/mods-enabled/ssl.load',
-        notify  => Service['httpd'],
+        notify  => Service['apache'],
         require => Class['apache::install'],
       }
     }

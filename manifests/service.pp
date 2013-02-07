@@ -4,7 +4,8 @@ class apache::service {
     default           => 'httpd',
   }
 
-  service { $http_service:
+  service { 'apache':
+    name       => $http_service,
     ensure     => running,
     enable     => true,
     hasstatus  => true,
@@ -20,7 +21,7 @@ class apache::service {
       /(Debian|Ubuntu)/ => '/usr/sbin/apache2ctl -t',
       default           => '/usr/sbin/apachectl -t',
     },
-    require     => Service[$http_service],
+    require     => Service['apache'],
     refreshonly => true,
   }
 

@@ -11,8 +11,9 @@ class apache::install {
     }
   }
 
-  package { $http_package:
-    ensure => installed,
-    alias  => 'httpd'
+  package { 'httpd':
+    alias  => 'apache',
+    name => $http_package,
+    ensure => present,
   }
 }
