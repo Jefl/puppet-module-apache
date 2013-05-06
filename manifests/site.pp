@@ -2,7 +2,7 @@ define apache::site(
   $docroot,
   $ensure = 'present',
   $admin = 'webmaster',
-  $aliases = '',
+  $aliases = [],
   $rails = false
 ) {
   if $rails { include passenger }
