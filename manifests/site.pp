@@ -2,6 +2,7 @@ define apache::site(
   $docroot,
   $ensure = 'present',
   $admin = 'webmaster',
+  $servername = $name,
   $aliases = [],
   $rails = false
 ) {
