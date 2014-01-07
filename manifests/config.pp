@@ -31,4 +31,38 @@ class apache::config {
     require => Class['apache::install'],
   }
 
+  # Ensure the Version module is loaded as we need it in the Foreman vhosts
+  # RedHat distros come with this enabled. Newer Debian and Ubuntu distros
+  # comes also with this enabled. Only old Debian and Ubuntu distros (squeeze,
+  # lucid, precise) needs hand-holding.
+  case $::lsbdistcodename {
+    'squeeze','lucid','precise': {
+      exec { 'enable-version':
+        command => '/usr/sbin/a2enmod version',
+        creates => '/etc/apache2/mods-enabled/version.load',
+        notify  => Service['httpd'],
+        require => Class['apache::install'],
+      }
+    }
+    default: {}
+  }
+
+  # For Apache2 Rails assets optimalization
+  case $::osfamily {
+    'Debian': {
+      exec { 'enable-expires':
+        command => '/usr/sbin/a2enmod expires',
+        creates => '/etc/apache2/mods-enabled/expires.load',
+        notify  => Service['httpd'],
+        require => Class['apache::install'],
+      }
+      exec { 'enable-rewrite':
+        command => '/usr/sbin/a2enmod rewrite',
+        creates => '/etc/apache2/mods-enabled/rewrite.load',
+        notify  => Service['httpd'],
+        require => Class['apache::install'],
+      }
+    }
+    default: {}
+  }
 }

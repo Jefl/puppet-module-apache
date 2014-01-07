@@ -1,7 +1,7 @@
 class apache::service {
-  $http_service = $::operatingsystem ? {
-    /(Debian|Ubuntu)/ => 'apache2',
-    default           => 'httpd',
+  $http_service = $::osfamily ? {
+    'Debian' => 'apache2',
+    default  => 'httpd',
   }
 
   service { 'apache':
@@ -16,13 +16,13 @@ class apache::service {
 
   exec { 'reload-apache':
     command             => "service ${http_service} reload",
-    path                => ["/sbin", "/usr/sbin", "/bin", "/usr/bin"],
+    path                => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
     onlyif              => $::operatingsystem ? {
       /(Debian|Ubuntu)/ => '/usr/sbin/apache2ctl -t',
       default           => '/usr/sbin/apachectl -t',
     },
-    require     => Service['apache'],
-    refreshonly => true,
+    require             => Service[$http_service],
+    refreshonly         => true,
   }
 
 }
